@@ -5,9 +5,11 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 import 'bird.dart';
+import 'game_over_menu.dart';
 import 'pipe.dart';
 import 'pipe_pair.dart';
 
+// ignore: deprecated_member_use
 class MyGame extends FlameGame with TapDetector {
   late Bird bird;
   late Timer pipeTimer;
@@ -15,6 +17,10 @@ class MyGame extends FlameGame with TapDetector {
 
   bool isGameOver = false;
   int score = 0;
+
+  MyGame() {
+    overlays.addEntry('gameOver', (context, game) => GameOverMenu(game: this));
+  }
 
   @override
   Future<void> onLoad() async {
@@ -35,10 +41,7 @@ class MyGame extends FlameGame with TapDetector {
   }
 
   void spawnPipe() {
-    add(PipePair(
-      position: Vector2(size.x, 0),
-      screenHeight: size.y,
-    ));
+    add(PipePair(position: Vector2(size.x, 0), screenHeight: size.y));
   }
 
   @override
@@ -63,8 +66,7 @@ class MyGame extends FlameGame with TapDetector {
               }
 
               // ✅ SCORE (only once per pipe)
-              if (!child.scored &&
-                  pipeRect.right < birdRect.left) {
+              if (!child.scored && pipeRect.right < birdRect.left) {
                 child.scored = true;
                 addScore();
               }
@@ -85,6 +87,8 @@ class MyGame extends FlameGame with TapDetector {
     isGameOver = true;
     pipeTimer.stop();
     pauseEngine();
+
+    overlays.add('gameOver');
   }
 
   @override
@@ -107,6 +111,8 @@ class MyGame extends FlameGame with TapDetector {
     });
 
     resumeEngine();
+
+    overlays.remove('gameOver');
 
     pipeTimer.stop();
     pipeTimer = Timer(2, repeat: true, onTick: spawnPipe);
