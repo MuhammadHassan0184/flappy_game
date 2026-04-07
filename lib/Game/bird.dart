@@ -8,7 +8,7 @@ class Bird extends PositionComponent {
   @override
   Future<void> onLoad() async {
     size = Vector2(50, 50);
-    position = Vector2(100, 200);
+    position = Vector2(40, 200);
   }
 
   @override
@@ -37,7 +37,7 @@ class Bird extends PositionComponent {
   }
 
   void reset() {
-    position = Vector2(100, 200);
+    position = Vector2(40, 200);
     velocity = 0;
   }
 
