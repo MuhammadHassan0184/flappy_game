@@ -28,40 +28,44 @@ class Bird extends PositionComponent {
   }
 
   Rect getRect() {
-    return Rect.fromLTWH(
-      absolutePosition.x,
-      absolutePosition.y,
-      size.x,
-      size.y,
-    );
-  }
+  return Rect.fromLTWH(
+    absolutePosition.x + 4,
+    absolutePosition.y,
+    size.x - 8,
+    size.y,
+  );
+}
 
   void reset() {
     position = Vector2(40, 200);
     velocity = 0;
   }
+   @override
+void render(Canvas canvas) {
+  final paint = Paint()..color = Colors.yellow;
+  canvas.drawRect(size.toRect(), paint); // ✅ correct
+}
+  // @override
+  // void render(Canvas canvas) {
+  //   final paint = Paint()..color = Colors.yellow;
 
-  @override
-  void render(Canvas canvas) {
-    final paint = Paint()..color = Colors.yellow;
+  //   canvas.save();
 
-    canvas.save();
+  //   final angle = (velocity / 500).clamp(-1.0, 1.0);
 
-    // Convert velocity into a proper rotation (radians)
-    final angle = (velocity / 500).clamp(-1.0, 1.0);
+  //   // ✅ USE absolutePosition (VERY IMPORTANT)
+  //   canvas.translate(
+  //     absolutePosition.x + size.x / 2,
+  //     absolutePosition.y + size.y / 2,
+  //   );
 
-    // Move origin to center
-    canvas.translate(position.x + size.x / 2, position.y + size.y / 2);
+  //   canvas.rotate(angle);
 
-    // Rotate
-    canvas.rotate(angle);
+  //   canvas.drawRect(
+  //     Rect.fromCenter(center: Offset(0, 0), width: size.x, height: size.y),
+  //     paint,
+  //   );
 
-    // Draw centered
-    canvas.drawRect(
-      Rect.fromCenter(center: Offset(0, 0), width: size.x, height: size.y),
-      paint,
-    );
-
-    canvas.restore();
-  }
+  //   canvas.restore();
+  // }
 }

@@ -59,13 +59,11 @@ class MyGame extends FlameGame with TapDetector {
             if (child is Pipe) {
               final pipeRect = child.getRect();
 
-              // ✅ COLLISION
               if (birdRect.overlaps(pipeRect)) {
                 gameOver();
                 return;
               }
 
-              // ✅ SCORE (only once per pipe)
               if (!child.scored && pipeRect.right < birdRect.left) {
                 child.scored = true;
                 addScore();

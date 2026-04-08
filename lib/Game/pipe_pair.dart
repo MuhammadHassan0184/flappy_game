@@ -3,30 +3,33 @@ import 'package:flame/components.dart';
 import 'pipe.dart';
 
 class PipePair extends PositionComponent {
-  final double gap = 150;
+  final double gap = 180;
   final double speed = 200;
 
   late Pipe topPipe;
   late Pipe bottomPipe;
 
   PipePair({required Vector2 position, required double screenHeight}) {
-    this.position = position;
+  this.position = position;
 
-    double gapY = Random().nextDouble() * (screenHeight - gap - 200) + 100;
+  double gapY = Random().nextDouble() * (screenHeight - gap - 100) + 50;
 
-    topPipe = Pipe(
-      position: Vector2(0, gapY - 200),
-      height: 200,
-    );
+  double topHeight = gapY;
+  double bottomHeight = screenHeight - gapY - gap;
 
-    bottomPipe = Pipe(
-      position: Vector2(0, gapY + gap),
-      height: 200,
-    );
+  topPipe = Pipe(
+    position: Vector2(0, 0),
+    height: topHeight,
+  );
 
-    add(topPipe);
-    add(bottomPipe);
-  }
+  bottomPipe = Pipe(
+    position: Vector2(0, gapY + gap),
+    height: bottomHeight,
+  );
+
+  add(topPipe);
+  add(bottomPipe);
+}
 
   @override
   void update(double dt) {
