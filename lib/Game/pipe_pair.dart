@@ -10,26 +10,60 @@ class PipePair extends PositionComponent {
   late Pipe bottomPipe;
 
   PipePair({required Vector2 position, required double screenHeight}) {
-  this.position = position;
+    this.position = position;
 
-  double gapY = Random().nextDouble() * (screenHeight - gap - 100) + 50;
+    final random = Random();
 
-  double topHeight = gapY;
-  double bottomHeight = screenHeight - gapY - gap;
+    int type = random.nextInt(3); // 0,1,2
 
-  topPipe = Pipe(
-    position: Vector2(0, 0),
-    height: topHeight,
-  );
+    if (type == 0) {
+      // 🟢 NORMAL (both pipes)
+      double gapY = random.nextDouble() * (screenHeight - gap - 100) + 50;
 
-  bottomPipe = Pipe(
-    position: Vector2(0, gapY + gap),
-    height: bottomHeight,
-  );
+      double topHeight = gapY;
+      double bottomHeight = screenHeight - gapY - gap;
 
-  add(topPipe);
-  add(bottomPipe);
-}
+      topPipe = Pipe(position: Vector2(0, 0), height: topHeight);
+
+      bottomPipe = Pipe(position: Vector2(0, gapY + gap), height: bottomHeight);
+
+      add(topPipe);
+      add(bottomPipe);
+    } else if (type == 1) {
+      // 🔺 GAP AT TOP (only bottom pipe)
+      double height = random.nextDouble() * (screenHeight - 200) + 100;
+
+      bottomPipe = Pipe(
+        position: Vector2(0, screenHeight - height),
+        height: height,
+      );
+
+      add(bottomPipe);
+    } else {
+      // 🔻 GAP AT BOTTOM (only top pipe)
+      double height = random.nextDouble() * (screenHeight - 200) + 100;
+
+      topPipe = Pipe(position: Vector2(0, 0), height: height);
+
+      add(topPipe);
+    }
+  }
+
+  // PipePair({required Vector2 position, required double screenHeight}) {
+  //   this.position = position;
+
+  //   double gapY = Random().nextDouble() * (screenHeight - gap - 100) + 50;
+
+  //   double topHeight = gapY;
+  //   double bottomHeight = screenHeight - gapY - gap;
+
+  //   topPipe = Pipe(position: Vector2(0, 0), height: topHeight);
+
+  //   bottomPipe = Pipe(position: Vector2(0, gapY + gap), height: bottomHeight);
+
+  //   add(topPipe);
+  //   add(bottomPipe);
+  // }
 
   @override
   void update(double dt) {
