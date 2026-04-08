@@ -14,8 +14,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final game = MyGame();
-
     return MaterialApp(
       title: 'Flappy Game',
       debugShowCheckedModeBanner: false,
@@ -23,13 +21,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: Scaffold(
-        body: GameWidget(
-          game: MyGame(),
-          overlayBuilderMap: {
-            'home': (context, game) => HomeMenu(game: game as MyGame),
-            'pause': (context, game) => PauseMenu(game: game as MyGame),
-            'gameOver': (context, game) => GameOverMenu(game: game as MyGame),
-          },
+        body: SafeArea(
+          child: GameWidget(
+            game: MyGame(),
+            overlayBuilderMap: {
+              'home': (context, game) => HomeMenu(game: game as MyGame),
+              'pause': (context, game) => PauseMenu(game: game as MyGame),
+              'gameOver': (context, game) => GameOverMenu(game: game as MyGame),
+            },
+          ),
         ),
       ),
     );

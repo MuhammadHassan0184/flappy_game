@@ -25,27 +25,25 @@ class MyGame extends FlameGame with TapCallbacks {
   bool isNewBest = false;
 
   String getMedal() {
-  if (score >= 20) {
-    return "gold";
-  } else if (score >= 10) {
-    return "silver";
-  } else if (score >= 5) {
-    return "bronze";
-  } else {
-    return "none";
+    if (score >= 20) {
+      return "gold";
+    } else if (score >= 10) {
+      return "silver";
+    } else if (score >= 5) {
+      return "bronze";
+    } else {
+      return "none";
+    }
   }
-}
 
   MyGame() {
     overlays.addEntry('gameOver', (context, game) => GameOverMenu(game: this));
-    // overlays.addEntry('home', (context, game) => HomeMenu(game: this));
-    // overlays.addEntry('pause', (context, game) => PauseMenu(game: this));
   }
 
   Future<void> loadBestScore() async {
-  final prefs = await SharedPreferences.getInstance();
-  bestScore = prefs.getInt('bestScore') ?? 0;
-}
+    final prefs = await SharedPreferences.getInstance();
+    bestScore = prefs.getInt('bestScore') ?? 0;
+  }
 
   @override
   Future<void> onLoad() async {
@@ -118,6 +116,12 @@ class MyGame extends FlameGame with TapCallbacks {
       pipeTimer.update(dt);
       difficulty += dt * 3;
 
+      // ✅ NEW: Check if bird falls below screen
+      if (bird.position.y > size.y - bird.size.y) {
+        gameOver();
+        return;
+      }
+
       final birdRect = bird.getRect();
 
       for (final component in children) {
@@ -149,22 +153,22 @@ class MyGame extends FlameGame with TapCallbacks {
   }
 
   void gameOver() async {
-  isGameOver = true;
-  pipeTimer.stop();
-  pauseEngine();
+    isGameOver = true;
+    pipeTimer.stop();
+    pauseEngine();
 
-  if (score > bestScore) {
-    bestScore = score;
-    isNewBest = true;
+    if (score > bestScore) {
+      bestScore = score;
+      isNewBest = true;
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('bestScore', bestScore);
-  } else {
-    isNewBest = false;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('bestScore', bestScore);
+    } else {
+      isNewBest = false;
+    }
+
+    overlays.add('gameOver');
   }
-
-  overlays.add('gameOver');
-}
 
   // ✅ ✅ SINGLE TAP HANDLER (FIXED)
   @override
@@ -221,4 +225,3 @@ class MyGame extends FlameGame with TapCallbacks {
   @override
   Color backgroundColor() => Colors.blue;
 }
-

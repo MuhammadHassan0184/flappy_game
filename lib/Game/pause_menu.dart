@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'my_game.dart';
@@ -14,9 +16,7 @@ class PauseMenu extends StatelessWidget {
         // Soft blur + light overlay
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-          child: Container(
-            color: Colors.white.withOpacity(0.3),
-          ),
+          child: Container(color: Colors.white.withOpacity(0.3)),
         ),
 
         // Center popup card
