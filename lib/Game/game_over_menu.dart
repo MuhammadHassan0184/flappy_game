@@ -62,11 +62,6 @@ class GameOverMenu extends StatelessWidget {
                       child: Text(
                         "Score: ${game.score}",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.black87,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
                       ),
                     ),
 
@@ -79,14 +74,25 @@ class GameOverMenu extends StatelessWidget {
                         color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: Text(
-                        "Best: ${game.bestScore}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.black87,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Best: ${game.bestScore}",
+                            textAlign: TextAlign.center,
+                          ),
+
+                          if (game.isNewBest)
+                            const Padding(
+                              padding: EdgeInsets.only(top: 5),
+                              child: Text(
+                                "NEW BEST! 🎉",
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
                   ],

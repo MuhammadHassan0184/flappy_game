@@ -5,6 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bird.dart';
 import 'game_over_menu.dart';
@@ -21,6 +22,7 @@ class MyGame extends FlameGame with TapCallbacks {
 
   double difficulty = 0;
   int bestScore = 0;
+  bool isNewBest = false;
 
   MyGame() {
     overlays.addEntry('gameOver', (context, game) => GameOverMenu(game: this));
@@ -28,8 +30,15 @@ class MyGame extends FlameGame with TapCallbacks {
     // overlays.addEntry('pause', (context, game) => PauseMenu(game: this));
   }
 
+  Future<void> loadBestScore() async {
+  final prefs = await SharedPreferences.getInstance();
+  bestScore = prefs.getInt('bestScore') ?? 0;
+}
+
   @override
   Future<void> onLoad() async {
+    await loadBestScore(); // ✅ load saved score
+
     bird = Bird();
     add(bird);
 
@@ -127,18 +136,23 @@ class MyGame extends FlameGame with TapCallbacks {
     score++;
   }
 
-  void gameOver() {
-    isGameOver = true;
-    pipeTimer.stop();
-    pauseEngine();
+  void gameOver() async {
+  isGameOver = true;
+  pipeTimer.stop();
+  pauseEngine();
 
-    // ✅ update best score
-    if (score > bestScore) {
-      bestScore = score;
-    }
+  if (score > bestScore) {
+    bestScore = score;
+    isNewBest = true;
 
-    overlays.add('gameOver');
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('bestScore', bestScore);
+  } else {
+    isNewBest = false;
   }
+
+  overlays.add('gameOver');
+}
 
   // ✅ ✅ SINGLE TAP HANDLER (FIXED)
   @override
@@ -195,3 +209,4 @@ class MyGame extends FlameGame with TapCallbacks {
   @override
   Color backgroundColor() => Colors.blue;
 }
+
