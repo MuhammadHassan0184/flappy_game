@@ -2,22 +2,24 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'my_game.dart';
 
-class GameOverMenu extends StatelessWidget {
+class PauseMenu extends StatelessWidget {
   final MyGame game;
 
-  const GameOverMenu({super.key, required this.game});
+  const PauseMenu({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Light blur background
+        // Soft blur + light overlay
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-          child: Container(color: Colors.white.withOpacity(0.3)),
+          child: Container(
+            color: Colors.white.withOpacity(0.3),
+          ),
         ),
 
-        // Center popup
+        // Center popup card
         Center(
           child: Container(
             width: 280,
@@ -38,39 +40,17 @@ class GameOverMenu extends StatelessWidget {
               children: [
                 // Title
                 const Text(
-                  "GAME OVER",
+                  "Game Paused",
                   style: TextStyle(
-                    color: Colors.redAccent,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
+                    color: Colors.black87,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
 
                 const SizedBox(height: 20),
 
-                // Score box
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    "Score: ${game.score}",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.black87,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // Restart button
+                // Resume button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -83,15 +63,39 @@ class GameOverMenu extends StatelessWidget {
                       elevation: 2,
                     ),
                     onPressed: () {
-                      game.overlays.remove('gameOver'); // ✅ close popup
+                      game.resumeGame();
+                    },
+                    child: const Text(
+                      "RESUME",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // Restart button (FIXED)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 2,
+                    ),
+                    onPressed: () {
+                      // ✅ CLOSE PAUSE OVERLAY FIRST
+                      game.overlays.remove('pause');
+
+                      // ✅ THEN RESTART GAME
                       game.restartGame();
                     },
                     child: const Text(
                       "RESTART",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),

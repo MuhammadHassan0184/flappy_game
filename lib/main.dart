@@ -1,3 +1,5 @@
+import 'package:flappy_game/game/home_menu.dart';
+import 'package:flappy_game/game/pause_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'game/my_game.dart';
@@ -22,12 +24,11 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         body: GameWidget(
-          game: game,
-
-          // ✅ Register overlays here
+          game: MyGame(),
           overlayBuilderMap: {
-            'gameOver': (context, game) =>
-                GameOverMenu(game: game as MyGame),
+            'home': (context, game) => HomeMenu(game: game as MyGame),
+            'pause': (context, game) => PauseMenu(game: game as MyGame),
+            'gameOver': (context, game) => GameOverMenu(game: game as MyGame),
           },
         ),
       ),
