@@ -20,6 +20,7 @@ class MyGame extends FlameGame with TapCallbacks {
   int score = 0;
 
   double difficulty = 0;
+  int bestScore = 0;
 
   MyGame() {
     overlays.addEntry('gameOver', (context, game) => GameOverMenu(game: this));
@@ -130,6 +131,12 @@ class MyGame extends FlameGame with TapCallbacks {
     isGameOver = true;
     pipeTimer.stop();
     pauseEngine();
+
+    // ✅ update best score
+    if (score > bestScore) {
+      bestScore = score;
+    }
+
     overlays.add('gameOver');
   }
 
@@ -166,17 +173,17 @@ class MyGame extends FlameGame with TapCallbacks {
   }
 
   void restartGame() {
+    overlays.remove('gameOver');
+    overlays.remove('pause');
+
     isGameOver = false;
     score = 0;
-    difficulty = 0;
 
     bird.reset();
 
     children.whereType<PipePair>().toList().forEach((pair) {
       pair.removeFromParent();
     });
-
-    overlays.remove('gameOver');
 
     resumeEngine();
 
