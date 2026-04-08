@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'my_game.dart';
@@ -6,6 +8,20 @@ class GameOverMenu extends StatelessWidget {
   final MyGame game;
 
   const GameOverMenu({super.key, required this.game});
+
+  Widget _buildMedal(MyGame game) {
+    String medal = game.getMedal();
+
+    if (medal == "gold") {
+      return const Text("🥇 GOLD", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+    } else if (medal == "silver") {
+      return const Text("🥈 SILVER", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+    } else if (medal == "bronze") {
+      return const Text("🥉 BRONZE", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold));
+    } else {
+      return const Text("No Medal", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +80,10 @@ class GameOverMenu extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
+
+                    const SizedBox(height: 10),
+
+                    _buildMedal(game),
 
                     const SizedBox(height: 10),
 

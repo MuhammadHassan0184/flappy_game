@@ -24,6 +24,18 @@ class MyGame extends FlameGame with TapCallbacks {
   int bestScore = 0;
   bool isNewBest = false;
 
+  String getMedal() {
+  if (score >= 20) {
+    return "gold";
+  } else if (score >= 10) {
+    return "silver";
+  } else if (score >= 5) {
+    return "bronze";
+  } else {
+    return "none";
+  }
+}
+
   MyGame() {
     overlays.addEntry('gameOver', (context, game) => GameOverMenu(game: this));
     // overlays.addEntry('home', (context, game) => HomeMenu(game: this));
