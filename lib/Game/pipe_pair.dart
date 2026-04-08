@@ -3,13 +3,23 @@ import 'package:flame/components.dart';
 import 'pipe.dart';
 
 class PipePair extends PositionComponent {
-  final double gap = 180;
+  final double gap = 250;
   final double speed = 200;
 
   late Pipe topPipe;
   late Pipe bottomPipe;
 
-  PipePair({required Vector2 position, required double screenHeight}) {
+  double moveSpeed = 40;
+  double direction = 1;
+
+  final double difficulty;
+  
+
+  PipePair({
+    required Vector2 position,
+    required double screenHeight,
+    required this.difficulty,
+  }) {
     this.position = position;
 
     final random = Random();
@@ -64,16 +74,34 @@ class PipePair extends PositionComponent {
   //   add(topPipe);
   //   add(bottomPipe);
   // }
-
   @override
   void update(double dt) {
     super.update(dt);
 
-    // Move whole pair
+    // 👉 Move left
     position.x -= speed * dt;
+
+    // 👉 Swing up & down
+    position.y += direction * moveSpeed * dt;
+
+    // Reverse direction (limit movement)
+    if (position.y > 40 || position.y < -40) {
+      direction *= -1;
+    }
 
     if (position.x < -100) {
       removeFromParent();
     }
   }
+  // @override
+  // void update(double dt) {
+  //   super.update(dt);
+
+  //   // Move whole pair
+  //   position.x -= speed * dt;
+
+  //   if (position.x < -100) {
+  //     removeFromParent();
+  //   }
+  // }
 }

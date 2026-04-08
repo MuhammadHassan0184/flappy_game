@@ -18,6 +18,8 @@ class MyGame extends FlameGame with TapDetector {
   bool isGameOver = false;
   int score = 0;
 
+  double difficulty = 0;
+
   MyGame() {
     overlays.addEntry('gameOver', (context, game) => GameOverMenu(game: this));
   }
@@ -41,7 +43,12 @@ class MyGame extends FlameGame with TapDetector {
   }
 
   void spawnPipe() {
-    add(PipePair(position: Vector2(size.x, 0), screenHeight: size.y));
+    // add(PipePair(position: Vector2(size.x, 0), screenHeight: size.y));
+    add(PipePair(
+  position: Vector2(size.x, 0),
+  screenHeight: size.y,
+  difficulty: difficulty,
+));
   }
 
   @override
@@ -50,6 +57,7 @@ class MyGame extends FlameGame with TapDetector {
 
     if (!isGameOver) {
       pipeTimer.update(dt);
+    difficulty += dt * 3; // increases slowly
 
       final birdRect = bird.getRect();
 

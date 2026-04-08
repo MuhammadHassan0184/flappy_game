@@ -28,23 +28,41 @@ class Bird extends PositionComponent {
   }
 
   Rect getRect() {
-  return Rect.fromLTWH(
-    absolutePosition.x + 4,
-    absolutePosition.y,
-    size.x - 8,
-    size.y,
-  );
-}
+    return Rect.fromLTWH(
+      absolutePosition.x + 4,
+      absolutePosition.y,
+      size.x - 8,
+      size.y,
+    );
+  }
 
   void reset() {
     position = Vector2(40, 200);
     velocity = 0;
   }
-   @override
-void render(Canvas canvas) {
-  final paint = Paint()..color = Colors.yellow;
-  canvas.drawRect(size.toRect(), paint); // ✅ correct
-}
+
+  @override
+  void render(Canvas canvas) {
+    final paint = Paint()..color = Colors.yellow;
+
+    canvas.save();
+
+    canvas.translate(size.x / 2, size.y / 2);
+    canvas.rotate(angle);
+
+    canvas.drawRect(
+      Rect.fromCenter(center: Offset(0, 0), width: size.x, height: size.y),
+      paint,
+    );
+
+    canvas.restore();
+  }
+  //  @override
+  // void render(Canvas canvas) {
+  //   final paint = Paint()..color = Colors.yellow;
+  //   canvas.drawRect(size.toRect(), paint); // ✅ correct
+  // }
+
   // @override
   // void render(Canvas canvas) {
   //   final paint = Paint()..color = Colors.yellow;
